@@ -74,4 +74,4 @@ Uma extensão para VS Code/Cursor que permite testar o envio de notificações p
 
 ## Licença
 
-Este projeto está licenciado sob a licença MIT - veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+Este projeto está licenciado sob a licença "Beer-ware" - se você me encontrar algum dia e achar que este código vale a pena, você pode me pagar uma cerveja em retorno. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
