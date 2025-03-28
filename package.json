@@ -41,13 +41,13 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "pnpm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src",
+    "pretest": "pnpm run compile && pnpm run lint",
+    "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
-    "build": "npm run compile && npm run lint",
+    "build": "pnpm run compile && pnpm run lint",
     "clean": "rimraf out",
     "package": "vsce package",
     "publish": "vsce publish"
@@ -64,7 +64,8 @@
     "mocha": "^10.2.0",
     "rimraf": "^5.0.5",
     "typescript": "^5.3.3",
-    "@vscode/vsce": "^2.24.0"
+    "@vscode/vsce": "^2.24.0",
+    "@vscode/test-electron": "^2.3.9"
   },
   "dependencies": {
     "firebase-admin": "^13.2.0"
