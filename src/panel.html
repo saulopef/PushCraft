@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FCM Test</title>
+    <style>
+        body {
+            padding: 20px;
+            color: var(--vscode-foreground);
+            font-family: var(--vscode-font-family);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid var(--vscode-input-border);
+            background: var(--vscode-input-background);
+            color: var(--vscode-input-foreground);
+        }
+        button {
+            background: var(--vscode-button-background);
+            color: var(--vscode-button-foreground);
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background: var(--vscode-button-hoverBackground);
+        }
+        .error {
+            color: var(--vscode-errorForeground);
+            margin-top: 5px;
+        }
+        .success {
+            color: var(--vscode-testing-iconPassed);
+            margin-top: 5px;
+        }
+        .preview-image {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 10px;
+            display: none;
+        }
+        .log-container {
+            margin-top: 20px;
+            padding: 10px;
+            background: var(--vscode-editor-background);
+            border: 1px solid var(--vscode-input-border);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .log-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .log-content {
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .platform-section {
+            border: 1px solid var(--vscode-input-border);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .platform-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--vscode-foreground);
+        }
+        .platform-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .platform-toggle button {
+            flex: 1;
+            padding: 8px;
+            background: var(--vscode-button-secondaryBackground);
+            color: var(--vscode-button-secondaryForeground);
+        }
+        .platform-toggle button.active {
+            background: var(--vscode-button-background);
+            color: var(--vscode-button-foreground);
+        }
+    </style>
+</head>
+<body>
+    <div class="form-group">
+        <label for="serviceAccount">Arquivo de Credenciais (service-account.json):</label>
+        <input type="file" id="serviceAccount" accept=".json">
+    </div>
+    <div class="form-group">
+        <label for="deviceToken">Token do Dispositivo:</label>
+        <input type="text" id="deviceToken" placeholder="Cole o token FCM aqui">
+    </div>
+
+    <div class="platform-toggle">
+        <button id="webButton" class="active">Web</button>
+        <button id="androidButton">Android</button>
+        <button id="iosButton">iOS</button>
+    </div>
+
+    <div id="webSection" class="platform-section">
+        <div class="platform-title">Configurações Web</div>
+        <div class="form-group">
+            <label for="title">Título da Notificação:</label>
+            <input type="text" id="title" placeholder="Digite o título">
+        </div>
+        <div class="form-group">
+            <label for="message">Mensagem:</label>
+            <textarea id="message" rows="4" placeholder="Digite a mensagem"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="imageUrl">URL da Imagem:</label>
+            <input type="url" id="imageUrl" placeholder="https://exemplo.com/imagem.jpg">
+            <img id="imagePreview" class="preview-image" alt="Preview da imagem">
+        </div>
+        <div class="form-group">
+            <label for="redirectUrl">URL de Redirecionamento:</label>
+            <input type="url" id="redirectUrl" placeholder="https://exemplo.com">
+        </div>
+    </div>
+
+    <div id="androidSection" class="platform-section" style="display: none;">
+        <div class="platform-title">Configurações Android</div>
+        <div class="form-group">
+            <label for="androidTitle">Título:</label>
+            <input type="text" id="androidTitle" placeholder="Digite o título">
+        </div>
+        <div class="form-group">
+            <label for="androidMessage">Mensagem:</label>
+            <textarea id="androidMessage" rows="4" placeholder="Digite a mensagem"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="androidImageUrl">URL da Imagem:</label>
+            <input type="url" id="androidImageUrl" placeholder="https://exemplo.com/imagem.jpg">
+        </div>
+        <div class="form-group">
+            <label for="androidChannelId">ID do Canal:</label>
+            <input type="text" id="androidChannelId" placeholder="default">
+        </div>
+        <div class="form-group">
+            <label for="androidPriority">Prioridade:</label>
+            <select id="androidPriority">
+                <option value="normal">Normal</option>
+                <option value="high">Alta</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="androidClickAction">Ação ao Clicar:</label>
+            <input type="text" id="androidClickAction" placeholder="OPEN_ACTIVITY">
+        </div>
+        <div class="form-group">
+            <label for="androidRedirectUrl">URL de Redirecionamento:</label>
+            <input type="url" id="androidRedirectUrl" placeholder="https://exemplo.com">
+        </div>
+    </div>
+
+    <div id="iosSection" class="platform-section" style="display: none;">
+        <div class="platform-title">Configurações iOS</div>
+        <div class="form-group">
+            <label for="iosTitle">Título:</label>
+            <input type="text" id="iosTitle" placeholder="Digite o título">
+        </div>
+        <div class="form-group">
+            <label for="iosMessage">Mensagem:</label>
+            <textarea id="iosMessage" rows="4" placeholder="Digite a mensagem"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="iosImageUrl">URL da Imagem:</label>
+            <input type="url" id="iosImageUrl" placeholder="https://exemplo.com/imagem.jpg">
+        </div>
+        <div class="form-group">
+            <label for="iosSound">Som:</label>
+            <select id="iosSound">
+                <option value="default">Padrão</option>
+                <option value="custom">Personalizado</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="iosBadge">Badge:</label>
+            <input type="number" id="iosBadge" placeholder="1">
+        </div>
+        <div class="form-group">
+            <label for="iosRedirectUrl">URL de Redirecionamento:</label>
+            <input type="url" id="iosRedirectUrl" placeholder="https://exemplo.com">
+        </div>
+    </div>
+
+    <button id="sendButton">Enviar Notificação</button>
+    <div id="status"></div>
+
+    <div class="log-container">
+        <div class="log-title">Payload da Notificação:</div>
+        <div id="payloadLog" class="log-content"></div>
+    </div>
+
+    <script>
+        const vscode = acquireVsCodeApi();
+        
+        // Gerenciamento de plataformas
+        const platforms = {
+            web: document.getElementById('webSection'),
+            android: document.getElementById('androidSection'),
+            ios: document.getElementById('iosSection')
+        };
+
+        const buttons = {
+            web: document.getElementById('webButton'),
+            android: document.getElementById('androidButton'),
+            ios: document.getElementById('iosButton')
+        };
+
+        function showPlatform(platform) {
+            Object.values(platforms).forEach(section => section.style.display = 'none');
+            Object.values(buttons).forEach(button => button.classList.remove('active'));
+            
+            platforms[platform].style.display = 'block';
+            buttons[platform].classList.add('active');
+        }
+
+        buttons.web.addEventListener('click', () => showPlatform('web'));
+        buttons.android.addEventListener('click', () => showPlatform('android'));
+        buttons.ios.addEventListener('click', () => showPlatform('ios'));
+        
+        // Preview da imagem
+        document.getElementById('imageUrl').addEventListener('input', (e) => {
+            const preview = document.getElementById('imagePreview');
+            if (e.target.value) {
+                preview.src = e.target.value;
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+        
+        document.getElementById('sendButton').addEventListener('click', () => {
+            const serviceAccountFile = document.getElementById('serviceAccount').files[0];
+            const deviceToken = document.getElementById('deviceToken').value;
+            const status = document.getElementById('status');
+
+            if (!serviceAccountFile) {
+                status.textContent = 'Por favor, selecione o arquivo de credenciais';
+                status.className = 'error';
+                return;
+            }
+
+            if (!deviceToken) {
+                status.textContent = 'Por favor, insira o token do dispositivo';
+                status.className = 'error';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const serviceAccount = JSON.parse(event.target.result);
+                    let payload = {
+                        serviceAccount,
+                        deviceToken,
+                        platform: 'web'
+                    };
+
+                    // Adicionar configurações específicas da plataforma
+                    if (platforms.web.style.display !== 'none') {
+                        const title = document.getElementById('title').value;
+                        const message = document.getElementById('message').value;
+                        const imageUrl = document.getElementById('imageUrl').value;
+                        const redirectUrl = document.getElementById('redirectUrl').value;
+
+                        if (!title || !message) {
+                            status.textContent = 'Por favor, preencha título e mensagem';
+                            status.className = 'error';
+                            return;
+                        }
+
+                        payload = {
+                            ...payload,
+                            platform: 'web',
+                            title,
+                            message,
+                            imageUrl,
+                            redirectUrl
+                        };
+                    } else if (platforms.android.style.display !== 'none') {
+                        const title = document.getElementById('androidTitle').value;
+                        const message = document.getElementById('androidMessage').value;
+                        const imageUrl = document.getElementById('androidImageUrl').value;
+                        const channelId = document.getElementById('androidChannelId').value;
+                        const priority = document.getElementById('androidPriority').value;
+                        const clickAction = document.getElementById('androidClickAction').value;
+                        const redirectUrl = document.getElementById('androidRedirectUrl').value;
+
+                        if (!title || !message) {
+                            status.textContent = 'Por favor, preencha título e mensagem';
+                            status.className = 'error';
+                            return;
+                        }
+
+                        payload = {
+                            ...payload,
+                            platform: 'android',
+                            title,
+                            message,
+                            imageUrl,
+                            channelId,
+                            priority,
+                            clickAction,
+                            redirectUrl
+                        };
+                    } else if (platforms.ios.style.display !== 'none') {
+                        const title = document.getElementById('iosTitle').value;
+                        const message = document.getElementById('iosMessage').value;
+                        const imageUrl = document.getElementById('iosImageUrl').value;
+                        const sound = document.getElementById('iosSound').value;
+                        const badge = document.getElementById('iosBadge').value;
+                        const redirectUrl = document.getElementById('iosRedirectUrl').value;
+
+                        if (!title || !message) {
+                            status.textContent = 'Por favor, preencha título e mensagem';
+                            status.className = 'error';
+                            return;
+                        }
+
+                        payload = {
+                            ...payload,
+                            platform: 'ios',
+                            title,
+                            message,
+                            imageUrl,
+                            sound,
+                            badge: parseInt(badge) || 1,
+                            redirectUrl
+                        };
+                    }
+                    
+                    // Atualizar log do payload
+                    document.getElementById('payloadLog').textContent = JSON.stringify(payload, null, 2);
+                    
+                    vscode.postMessage({
+                        command: 'sendNotification',
+                        data: payload
+                    });
+                } catch (error) {
+                    status.textContent = 'Erro ao ler arquivo de credenciais';
+                    status.className = 'error';
+                }
+            };
+            reader.readAsText(serviceAccountFile);
+        });
+
+        window.addEventListener('message', event => {
+            const message = event.data;
+            const status = document.getElementById('status');
+
+            switch (message.command) {
+                case 'success':
+                    status.textContent = message.text;
+                    status.className = 'success';
+                    break;
+                case 'error':
+                    status.textContent = message.text;
+                    status.className = 'error';
+                    break;
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,69 @@
+{
+  "name": "fcmtest",
+  "displayName": "fcmTest",
+  "description": "Test Fcm messages",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.87.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "fcmtest-container",
+          "title": "FCM Test",
+          "icon": "$(bell)"
+        }
+      ]
+    },
+    "views": {
+      "fcmtest-container": [
+        {
+          "type": "webview",
+          "id": "fcmtest.notificationPanel",
+          "name": "FCM Test",
+          "contextualTitle": "FCM Test"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "fcmtest.showPanel",
+        "title": "Show FCM Test Panel"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "node ./out/test/runTest.js",
+    "build": "npm run compile && npm run lint",
+    "clean": "rimraf out"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.87.0",
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "@typescript-eslint/parser": "^6.19.1",
+    "eslint": "^8.56.0",
+    "glob": "^10.3.10",
+    "mocha": "^10.2.0",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.2.0"
+  }
+}
