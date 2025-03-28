@@ -1,4 +1,4 @@
-name: Release Pipeline
+name: Release
 
 on:
   push:
@@ -15,27 +15,22 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
-          registry-url: 'https://registry.npmjs.org'
-          
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v3
-        with:
-          version: 8
+          node-version: '20'
+          cache: 'npm'
           
       - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
+        run: npm ci
         
       - name: Run tests
         uses: GabrielBB/xvfb-action@v1
         with:
-          run: pnpm test
+          run: npm test
         
       - name: Build
-        run: pnpm run build
+        run: npm run build
         
-      - name: Package Extension
-        run: pnpm vsce package
+      - name: Package
+        run: npm run package
         
       - name: Create Release
         id: create_release
@@ -45,6 +40,5 @@ jobs:
             *.vsix
           draft: false
           prerelease: false
-          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 

@@ -5,13 +5,35 @@ import * as admin from 'firebase-admin';
 import * as path from 'path';
 import * as fs from 'fs';
 
+interface ServiceAccount {
+	project_id: string;
+	client_email: string;
+	private_key: string;
+	[key: string]: unknown;
+}
+
+interface NotificationData {
+	title: string;
+	message: string;
+	deviceToken: string;
+	platform: 'web' | 'android' | 'ios';
+	imageUrl?: string;
+	redirectUrl?: string;
+	channelId?: string;
+	priority?: 'high' | 'normal';
+	clickAction?: string;
+	sound?: string;
+	badge?: number;
+	serviceAccount: ServiceAccount;
+}
+
 // Função para gerar um nome único para o app baseado nas credenciais
-function getAppName(serviceAccount: any): string {
+function getAppName(serviceAccount: ServiceAccount): string {
 	return `fcm-app-${serviceAccount.project_id}-${serviceAccount.client_email}`;
 }
 
 // Função para criar o payload específico de cada plataforma
-function createPlatformPayload(data: any): admin.messaging.Message {
+function createPlatformPayload(data: NotificationData): admin.messaging.Message {
 	const basePayload: admin.messaging.Message = {
 		notification: {
 			title: data.title,

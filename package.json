@@ -1,7 +1,7 @@
 {
   "name": "pushcraft",
   "displayName": "PushCraft",
-  "description": "Uma extensão elegante para criar e testar notificações push usando Firebase Cloud Messaging (FCM)",
+  "description": "Extensão para testar notificações push usando Firebase Cloud Messaging (FCM)",
   "version": "0.0.1",
   "publisher": "saulosenoski",
   "repository": {
@@ -62,7 +62,7 @@
     "@vscode/test-cli": "^0.0.6",
     "@vscode/test-electron": "^2.3.9",
     "eslint": "^8.56.0",
-    "typescript": "^5.3.3",
+    "typescript": "^5.5.0",
     "@vscode/vsce": "^2.24.0"
   },
   "dependencies": {
