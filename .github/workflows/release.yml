@@ -27,7 +27,9 @@ jobs:
         run: pnpm install
         
       - name: Run tests
-        run: pnpm test
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: pnpm test
         
       - name: Build
         run: pnpm run build
