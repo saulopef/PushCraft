@@ -45,7 +45,7 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "pnpm run compile && pnpm run lint",
-    "lint": "eslint src --ext ts",
+    "lint": "eslint src/**/*.ts",
     "test": "node ./out/test/runTest.js",
     "build": "pnpm run compile && pnpm run lint",
     "clean": "rimraf out",
