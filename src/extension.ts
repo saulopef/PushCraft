@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import * as admin from 'firebase-admin';
 import * as path from 'path';
+import * as fs from 'fs';
 
 // Função para gerar um nome único para o app baseado nas credenciais
 function getAppName(serviceAccount: any): string {
@@ -144,7 +145,7 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 
 	// Registrar o comando para mostrar o painel
-	let disposable = vscode.commands.registerCommand('fcmtest.showPanel', () => {
+	const disposable = vscode.commands.registerCommand('fcmtest.showPanel', () => {
 		panel.reveal(vscode.ViewColumn.Two);
 		vscode.commands.executeCommand('workbench.action.moveEditorToBelowGroup');
 	});
@@ -154,7 +155,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 function getWebviewContent(extensionPath: string): string {
 	const htmlPath = path.join(extensionPath, 'src', 'panel.html');
-	return require('fs').readFileSync(htmlPath, 'utf8');
+	return fs.readFileSync(htmlPath, 'utf8');
 }
 
 // This method is called when your extension is deactivated

@@ -14,9 +14,12 @@ suite('Extension Test Suite', () => {
 
 	test('Extensão deve ativar', async () => {
 		// O ID da extensão é publisher.name do package.json
-		// Como estamos em desenvolvimento, o publisher é undefined
-		// então usamos apenas o nome
-		const ext = vscode.extensions.getExtension('pushcraft');
+		// Em desenvolvimento, usamos apenas o nome do comando
+		const ext = vscode.extensions.all.find(e => 
+			e.packageJSON?.contributes?.commands?.some((c: { command: string }) => 
+				c.command === 'fcmtest.showPanel'
+			)
+		);
 		assert.ok(ext, 'Extensão não encontrada');
 		
 		if (ext) {
