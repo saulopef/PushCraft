@@ -85,38 +85,26 @@ function createPlatformPayload(data: any): admin.messaging.Message {
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Extensão FCM Test está ativa!');
 
-	// Criar o provider da webview
-	const provider = new FcmTestViewProvider(context.extensionPath);
-
-	// Registrar o provider
-	context.subscriptions.push(
-		vscode.window.registerWebviewViewProvider('fcmtest.notificationPanel', provider)
-	);
-}
-
-class FcmTestViewProvider implements vscode.WebviewViewProvider {
-	private _view?: vscode.WebviewView;
-
-	constructor(private readonly _extensionPath: string) {}
-
-	public resolveWebviewView(
-		webviewView: vscode.WebviewView,
-		context: vscode.WebviewViewResolveContext,
-		_token: vscode.CancellationToken,
-	): void | Thenable<void> {
-		this._view = webviewView;
-
-		webviewView.webview.options = {
+	// Criar e mostrar o painel lateral
+	const panel = vscode.window.createWebviewPanel(
+		'fcmtest.notificationPanel',
+		'FCM Test',
+		{ viewColumn: vscode.ViewColumn.Two, preserveFocus: true },
+		{
 			enableScripts: true,
-			localResourceRoots: [
-				vscode.Uri.file(path.join(this._extensionPath, 'src'))
-			]
-		};
+			retainContextWhenHidden: true
+		}
+	);
 
-		webviewView.webview.html = this._getHtmlContent();
+	// Mover o painel para a área inferior
+	vscode.commands.executeCommand('workbench.action.moveEditorToBelowGroup');
 
-		// Manipular mensagens do webview
-		webviewView.webview.onDidReceiveMessage(async message => {
+	// Carregar o conteúdo HTML do painel
+	panel.webview.html = getWebviewContent(context.extensionPath);
+
+	// Manipular mensagens do webview
+	panel.webview.onDidReceiveMessage(
+		async message => {
 			switch (message.command) {
 				case 'sendNotification':
 					try {
@@ -138,25 +126,35 @@ class FcmTestViewProvider implements vscode.WebviewViewProvider {
 
 						// Enviar notificação usando o app específico
 						const response = await admin.messaging(app).send(payload);
-						webviewView.webview.postMessage({
+						panel.webview.postMessage({
 							command: 'success',
 							text: `Notificação enviada com sucesso! Message ID: ${response}`
 						});
 					} catch (error) {
-						webviewView.webview.postMessage({
+						panel.webview.postMessage({
 							command: 'error',
 							text: `Erro ao enviar notificação: ${error}`
 						});
 					}
 					break;
 			}
-		});
-	}
+		},
+		undefined,
+		context.subscriptions
+	);
 
-	private _getHtmlContent(): string {
-		const htmlPath = path.join(this._extensionPath, 'src', 'panel.html');
-		return require('fs').readFileSync(htmlPath, 'utf8');
-	}
+	// Registrar o comando para mostrar o painel
+	let disposable = vscode.commands.registerCommand('fcmtest.showPanel', () => {
+		panel.reveal(vscode.ViewColumn.Two);
+		vscode.commands.executeCommand('workbench.action.moveEditorToBelowGroup');
+	});
+
+	context.subscriptions.push(disposable);
+}
+
+function getWebviewContent(extensionPath: string): string {
+	const htmlPath = path.join(extensionPath, 'src', 'panel.html');
+	return require('fs').readFileSync(htmlPath, 'utf8');
 }
 
 // This method is called when your extension is deactivated

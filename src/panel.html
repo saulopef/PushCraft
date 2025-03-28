@@ -162,10 +162,6 @@
             <label for="androidClickAction">Ação ao Clicar:</label>
             <input type="text" id="androidClickAction" placeholder="OPEN_ACTIVITY">
         </div>
-        <div class="form-group">
-            <label for="androidRedirectUrl">URL de Redirecionamento:</label>
-            <input type="url" id="androidRedirectUrl" placeholder="https://exemplo.com">
-        </div>
     </div>
 
     <div id="iosSection" class="platform-section" style="display: none;">
@@ -192,10 +188,6 @@
         <div class="form-group">
             <label for="iosBadge">Badge:</label>
             <input type="number" id="iosBadge" placeholder="1">
-        </div>
-        <div class="form-group">
-            <label for="iosRedirectUrl">URL de Redirecionamento:</label>
-            <input type="url" id="iosRedirectUrl" placeholder="https://exemplo.com">
         </div>
     </div>
 
@@ -301,7 +293,6 @@
                         const channelId = document.getElementById('androidChannelId').value;
                         const priority = document.getElementById('androidPriority').value;
                         const clickAction = document.getElementById('androidClickAction').value;
-                        const redirectUrl = document.getElementById('androidRedirectUrl').value;
 
                         if (!title || !message) {
                             status.textContent = 'Por favor, preencha título e mensagem';
@@ -317,8 +308,7 @@
                             imageUrl,
                             channelId,
                             priority,
-                            clickAction,
-                            redirectUrl
+                            clickAction
                         };
                     } else if (platforms.ios.style.display !== 'none') {
                         const title = document.getElementById('iosTitle').value;
@@ -326,7 +316,6 @@
                         const imageUrl = document.getElementById('iosImageUrl').value;
                         const sound = document.getElementById('iosSound').value;
                         const badge = document.getElementById('iosBadge').value;
-                        const redirectUrl = document.getElementById('iosRedirectUrl').value;
 
                         if (!title || !message) {
                             status.textContent = 'Por favor, preencha título e mensagem';
@@ -341,8 +330,7 @@
                             message,
                             imageUrl,
                             sound,
-                            badge: parseInt(badge) || 1,
-                            redirectUrl
+                            badge: parseInt(badge) || 1
                         };
                     }
                     
