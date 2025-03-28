@@ -4,3 +4,7 @@ você pode fazer o que quiser com este código. Se nos encontrarmos algum dia e
 você achar que este código vale a pena, você pode me pagar uma cerveja em retorno.
 
 Saulo Senoski 
+
+git remote add origin https://github.com/saulopef/fcmtest.git
+git branch -M main
+git push -u origin main

@@ -1,6 +1,6 @@
-# FCM Test Extension
+# PushCraft
 
-Uma extensão para VS Code/Cursor que permite testar o envio de notificações push usando o Firebase Cloud Messaging (FCM).
+Uma extensão elegante para VS Code/Cursor que permite criar e testar notificações push usando o Firebase Cloud Messaging (FCM). Com PushCraft, você pode facilmente enviar e testar notificações personalizadas para Web, Android e iOS diretamente do seu editor.
 
 ## Funcionalidades
 
