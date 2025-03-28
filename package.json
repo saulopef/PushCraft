@@ -51,22 +51,27 @@
     "package": "vsce package",
     "publish": "vsce publish"
   },
+  "dependencies": {
+    "firebase-admin": "^13.2.0"
+  },
   "devDependencies": {
-    "@types/vscode": "^1.87.0",
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.6",
-    "@types/node": "20.x",
+    "@types/node": "^20.x",
+    "@types/vscode": "^1.87.0",
     "@typescript-eslint/eslint-plugin": "^6.19.1",
     "@typescript-eslint/parser": "^6.19.1",
+    "@vscode/test-electron": "^2.3.9",
+    "@vscode/vsce": "^2.24.0",
     "eslint": "^8.56.0",
     "glob": "^10.3.10",
     "mocha": "^10.2.0",
     "rimraf": "^5.0.5",
-    "typescript": "^5.3.3",
-    "@vscode/vsce": "^2.24.0",
-    "@vscode/test-electron": "^2.3.9"
+    "typescript": "^5.3.3"
   },
-  "dependencies": {
-    "firebase-admin": "^13.2.0"
-  }
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/saulosenoski/PushCraft.git"
+  },
+  "license": "Beerware"
 }
