@@ -10,7 +10,8 @@
     "Other"
   ],
   "activationEvents": [
-    
+    "onView:fcmtest.notificationPanel",
+    "onCommand:fcmtest.showPanel"
   ],
   "main": "./out/extension.js",
   "contributes": {

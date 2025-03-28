@@ -5,3 +5,13 @@ node_modules/
 .env
 *.log
 service-account.json
+.vscode-test/
+.vscode-test-web/
+*.vsix.LICENSE
+*.vsix.sha256
+test-resources/
+coverage/
+.nyc_output/
+dist/
+temp/
+.history/
